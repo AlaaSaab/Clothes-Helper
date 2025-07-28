@@ -1,0 +1,24 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+pubspec.lock
+
+# Editor directories and files
+.idea/
+.vscode/
+
+# iOS specific
+ios/Pods/
+
+# Android specific
+android/.gradle/
+android/.idea/
+
+# Other
+macos/
+linux/
+web/
+windows/
