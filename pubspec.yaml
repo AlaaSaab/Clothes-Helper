@@ -1,0 +1,48 @@
+name: clothes_helper
+description: A minimalist wardrobe management app built with Flutter.
+publish_to: 'none' # this is a private package and won't be published
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # State management
+  flutter_riverpod: ^2.4.3
+  # Local database
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  # Filesystem paths
+  path_provider: ^2.0.11
+  # Google AdMob integration
+  google_mobile_ads: ^3.1.0
+  # Cupertino icons for iOS style widgets
+  cupertino_icons: ^1.0.2
+  # Generate unique identifiers for new clothing items
+  uuid: ^3.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.3
+
+flutter:
+  uses-material-design: true
+  # Declare asset directories so Flutter can bundle them.  Currently only
+  # images are stored here; fonts are recommended but optional.
+  assets:
+    - assets/images/
+  # Example fonts section.  To use custom fonts, place your font files
+  # under assets/fonts/ and uncomment the following lines, updating the
+  # file names as appropriate.
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Bold.ttf
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #       - asset: assets/fonts/Roboto-Bold.ttf
