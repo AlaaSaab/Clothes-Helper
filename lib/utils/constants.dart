@@ -80,3 +80,40 @@ class AppTheme {
     ),
   );
 }
+
+/// Lists of predefined clothing types and colours.  These values are
+/// presented to the user when adding or editing an item to ensure
+/// consistent categorisation.
+class ClothesData {
+  /// Supported garment categories.  Extend this list as required.
+  static const List<String> types = [
+    'Shirt',
+    'T‑Shirt',
+    'Pants',
+    'Shorts',
+    'Skirt',
+    'Dress',
+    'Jacket',
+    'Sweater',
+    'Coat',
+    'Shoes',
+    'Accessories',
+  ];
+
+  /// Common colours for clothing.  You can add more or refine these
+  /// values based on your wardrobe.
+  static const List<String> colours = [
+    'Black',
+    'White',
+    'Grey',
+    'Red',
+    'Blue',
+    'Green',
+    'Yellow',
+    'Orange',
+    'Purple',
+    'Brown',
+    'Beige',
+    'Pink',
+  ];
+}

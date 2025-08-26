@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../utils/constants.dart';
+import '../providers/vip_provider.dart';
+import 'suggested_outfit_screen.dart';
 
 /// A simple page describing the benefits of upgrading to VIP.  In later
 /// phases this page will integrate with in‑app purchase APIs to allow
 /// users to subscribe or make a one‑time purchase.  It currently
 /// outlines the advantages of VIP membership.
-class VipScreen extends StatelessWidget {
+class VipScreen extends ConsumerWidget {
   const VipScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isVip = ref.watch(isVipProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('VIP Membership'),
@@ -21,7 +26,7 @@ class VipScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Become a VIP',
+              isVip ? 'Thank you for being a VIP' : 'Become a VIP',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -43,29 +48,33 @@ class VipScreen extends StatelessWidget {
               description: 'Backup your wardrobe and access it across devices.',
             ),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // In a future phase this will initiate an in‑app purchase.
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: const Text('Coming soon'),
-                      content: const Text(
-                          'In‑app purchases will be available in a future update.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                child: const Text('Upgrade Now'),
+            if (isVip) ...[
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const SuggestedOutfitScreen()),
+                    );
+                  },
+                  child: const Text('View Suggested Outfit'),
+                ),
               ),
-            ),
+            ] else ...[
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Simulate upgrade by toggling the provider
+                    ref.read(isVipProvider.notifier).state = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Thank you for upgrading!')),
+                    );
+                  },
+                  child: const Text('Upgrade Now'),
+                ),
+              ),
+            ],
           ],
         ),
       ),

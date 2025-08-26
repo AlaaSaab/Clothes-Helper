@@ -13,7 +13,8 @@ class AdService {
   static const String bannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
   static const String interstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
 
-  InterstitialAd? _interstitialAd;
+  /// Hold a reference to the loaded interstitial ad across the app.
+  static InterstitialAd? _interstitialAd;
 
   /// Initialise the Mobile Ads SDK.  Call this early in the app's
   /// lifecycle (e.g. in main before runApp).
@@ -22,8 +23,10 @@ class AdService {
   }
 
   /// Load an interstitial ad and cache it for display.  The loaded ad
-  /// will be stored in [_interstitialAd] and replaced once shown.
-  void loadInterstitial() {
+  /// will be stored in the static [_interstitialAd] and replaced once
+  /// shown.  This method can be called multiple times; if an ad is
+  /// already loaded it will be replaced.
+  static void loadInterstitial() {
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
@@ -32,7 +35,6 @@ class AdService {
           _interstitialAd = ad;
         },
         onAdFailedToLoad: (LoadAdError error) {
-          // Handle the error by logging or retrying later.
           _interstitialAd = null;
         },
       ),
@@ -40,8 +42,9 @@ class AdService {
   }
 
   /// Show the interstitial ad if it has been loaded.  After the ad is
-  /// shown it will be disposed and a new one should be loaded.
-  void showInterstitial() {
+  /// shown it will be disposed and a new one will be loaded.  This
+  /// method does nothing if no ad is loaded.
+  static void showInterstitial() {
     if (_interstitialAd != null) {
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (InterstitialAd ad) {

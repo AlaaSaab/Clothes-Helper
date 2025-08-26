@@ -9,7 +9,7 @@ void main() async {
   // but we don't need to block app startup on ad loading.
   final adService = AdService();
   await adService.init();
-  // Optionally pre‑load an interstitial ad for later use.
-  adService.loadInterstitial();
+  // Pre‑load an interstitial ad for later use.
+  AdService.loadInterstitial();
   runApp(const ClothesHelperApp());
 }

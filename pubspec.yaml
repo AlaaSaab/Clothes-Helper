@@ -22,6 +22,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   # Generate unique identifiers for new clothing items
   uuid: ^3.0.6
+  # Image selection from gallery and camera
+  image_picker: ^1.0.5
+  # In-app purchases plugin (not yet implemented)
+  in_app_purchase: ^3.1.9
 
 dev_dependencies:
   flutter_test:

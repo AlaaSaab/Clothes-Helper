@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:io';
+
 import '../models/clothing_item.dart';
 import '../providers/wardrobe_provider.dart';
+import '../providers/vip_provider.dart';
 import '../utils/constants.dart';
 import 'add_item_screen.dart';
 import 'wardrobe_screen.dart';
 import 'settings_screen.dart';
 import 'vip_screen.dart';
+import '../widgets/banner_ad_widget.dart';
 
 /// The home screen presents a simple overview of the user's wardrobe and
 /// provides navigation to other parts of the app.  In later phases this
@@ -20,6 +24,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(wardrobeProvider);
+    final isVip = ref.watch(isVipProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clothes Helper'),
@@ -38,16 +43,26 @@ class HomeScreen extends ConsumerWidget {
                 _ActionButton(
                   icon: Icons.add,
                   label: 'Add Item',
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const AddItemScreen()),
-                  ),
+                  onTap: () {
+                    if (!isVip) {
+                      AdService.showInterstitial();
+                    }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const AddItemScreen()),
+                    );
+                  },
                 ),
                 _ActionButton(
                   icon: Icons.inventory_2_outlined,
                   label: 'Wardrobe',
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const WardrobeScreen()),
-                  ),
+                  onTap: () {
+                    if (!isVip) {
+                      AdService.showInterstitial();
+                    }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const WardrobeScreen()),
+                    );
+                  },
                 ),
                 _ActionButton(
                   icon: Icons.settings,
@@ -86,11 +101,22 @@ class HomeScreen extends ConsumerWidget {
                       separatorBuilder: (_, __) => const Divider(height: 1),
                       itemBuilder: (context, index) {
                         final item = items[index];
+                        final hasImage = item.imagePath.isNotEmpty;
                         return ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: AppColors.primary,
-                            child: Text(item.name.isNotEmpty ? item.name[0].toUpperCase() : '?'),
-                          ),
+                          leading: hasImage
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  child: Image.file(
+                                    File(item.imagePath),
+                                    width: 48,
+                                    height: 48,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: AppColors.primary,
+                                  child: Text(item.name.isNotEmpty ? item.name[0].toUpperCase() : '?'),
+                                ),
                           title: Text(item.name),
                           subtitle: Text('${item.type} • ${item.color}'),
                           trailing: Icon(
@@ -106,7 +132,6 @@ class HomeScreen extends ConsumerWidget {
                                     : Colors.red,
                           ),
                           onTap: () {
-                            // Navigate to wardrobe page for details/editing in later phases.
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => const WardrobeScreen()),
                             );
@@ -115,13 +140,12 @@ class HomeScreen extends ConsumerWidget {
                       },
                     ),
             ),
-            // Placeholder for banner ad
-            Container(
-              height: 50,
-              color: Colors.grey.shade300,
-              alignment: Alignment.center,
-              child: const Text('Ad banner placeholder'),
-            ),
+            // Show banner ad only for non‑VIP users
+            if (!isVip)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: const BannerAdWidget(),
+              ),
           ],
         ),
       ),
