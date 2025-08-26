@@ -1,3 +1,7 @@
+// WARNING: Direct instantiation of StorageService could create issues with
+// testing and dependency injection. Consider using ref.read() or passing
+// StorageService as a parameter when this provider needs to be more testable
+// or when implementing proper DI patterns in the future.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/clothing_item.dart';
